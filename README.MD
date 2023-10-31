@@ -1,31 +1,35 @@
-# Neuron Ion Simulation in Blender
+# Blender Neuron Ion and Magnetic Field Simulation
 
 ## Overview
 
-This Blender script simulates the movement of ions (Sodium and Potassium) along a neural axon during a neuronal spike. It's a visual representation aiming to facilitate the understanding of ion movements and their role in action potentials in neurons. The script is written in Python and uses Blender's API for object creation, manipulation, and animation.
+This Blender script performs a simulated animation of Sodium and Potassium ions along a neural axon. Additionally, it includes magnetic spheres that rotate around the axon, mimicking a magnetic field. The aim is to visualize the complex interactions between ions and magnetic fields during a neural spike.
 
 ### Key Features
 
-- Generates a cylinder to represent a neural axon.
-- Populates the axon with Sodium and Potassium ions represented as spheres.
-- Animate the ions to move along the z-axis based on a Gaussian spike function.
-- Ions that move out of the axon are wrapped back to the other end, maintaining the total number of ions.
+- Generates a 3D cylinder representing the neural axon.
+- Creates Sodium and Potassium ions inside the axon.
+- Simulates magnetic spheres outside the axon to represent the magnetic field.
+- Animate ions and magnetic spheres based on a Gaussian spike function.
+- Materials are assigned to ions and magnetic spheres for better visualization.
 
-![EM Animation](EM.gif)
+![Simulation Example](EM.gif)
 
 ### How it Works
 
-1. **Clear Existing Mesh Objects**: The script first deletes any existing mesh objects in the scene.
-2. **Axon Creation**: A cylinder is added to act as the neural axon.
-3. **Ion Creation**: Sodium and Potassium ions are randomly placed along the axon. These ions are represented as small spheres.
-4. **Material Assignment**: Different materials are applied to Sodium and Potassium ions for better visualization.
-5. **Animation**: Each ion is animated to move along the z-axis. The movement is based on a Gaussian function, simulating the ion behavior during a neuronal spike. The ions are wrapped back to the opposite end if they move out of the specified bounds.
+1. **Environment Cleanup**: Deletes existing mesh objects in the scene.
+2. **Axon Creation**: Adds a cylinder to serve as the neural axon.
+3. **Ion Population**: Randomly places Sodium and Potassium ions within the axon.
+4. **Magnetic Field Representation**: Randomly places spheres at varying distances from the axon to act as magnetic particles.
+5. **Material Assignment**: Differentiates Sodium, Potassium, and magnetic spheres by color.
+6. **Animation**: 
+    - Moves ions based on a Gaussian spike function.
+    - Rotates magnetic spheres around the axon. The rotation speed is inversely proportional to their radial distance from the axon, and also varies based on the spike intensity.
+    - Scales the axon based on the spike intensity.
 
 ### Dependencies
 
 - Blender
 - Python
 
-For more detailed explanation, feel free to explore the source code. Enjoy visualizing the fascinating world of neurons!
+Feel free to dive into the source code for a more detailed understanding. Enjoy exploring this visual representation of ion behavior and magnetic fields in neurons!
 
-Note: Generated with the help of ChatGPT4.
