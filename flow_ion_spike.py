@@ -99,6 +99,8 @@ for frame in range(start_frame, end_frame + 1):
         ion.location.z += random.random() * spike_intensity
         if ion.location.z > 5:
             ion.location.z = -5
+        if ion.location.z < -5:
+            ion.location.z = 5
         ion.keyframe_insert(data_path="location", frame=frame)
 
     # Rotate magnetic spheres around the z-axis
