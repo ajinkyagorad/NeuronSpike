@@ -43,37 +43,46 @@ for i in range(num_ions):
             potassium_mat = bpy.data.materials["Potassium_Material"]
         ion.data.materials.append(potassium_mat)
 
-# Create an arrow object for instancing
-bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.02, depth=0.5, location=(0, 0, -1000))  # Offscreen location
-arrow_prototype = bpy.context.active_object
-bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='BOUNDS')
+# Create magnetic spheres
+magnetic_spheres = []
+total_spheres = 500  # or any number you prefer
 
-# Create a grid of arrows to represent the magnetic field
-magnetic_arrows = []
-for height in range(-5, 6, 2):
-    for radius in [2,3,4]:
-        for angle in range(0, 360, 20):
-            x = radius * math.cos(math.radians(angle))
-            y = radius * math.sin(math.radians(angle))
-            
-            # Instance the arrow
-            arrow = arrow_prototype.copy()
-            arrow.location = (x, y, height)
-            arrow.rotation_euler = (-math.pi/2, 0, math.radians(angle))
-            bpy.context.collection.objects.link(arrow)
-            
-            magnetic_arrows.append(arrow)
+for i in range(total_spheres):
+    min_radius = 2  # minimum distance from the axis of the cylinder
+    max_radius = 5  # maximum distance from the axis of the cylinder
+    height_low = -5
+    height_high = 5
+    
+    angle = random.uniform(0, 2 * math.pi)
+    radius = random.uniform(min_radius, max_radius)
+    height = random.uniform(height_low, height_high)
 
-# Hide the arrow prototype
-arrow_prototype.hide_render = True
-arrow_prototype.hide_viewport = True
+    x = radius * math.cos(angle)
+    y = radius * math.sin(angle)
+    z = height
+    
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.07, location=(x, y, z))
+    sphere = bpy.context.active_object
+    
+    # Assign green material to the magnetic spheres
+    if "Green_Material" not in bpy.data.materials:
+        green_mat = bpy.data.materials.new(name="Green_Material")
+        green_mat.diffuse_color = (0.0, 1.0, 0.0, 1)
+    else:
+        green_mat = bpy.data.materials["Green_Material"]
+        
+    sphere.data.materials.append(green_mat)
+    
+    magnetic_spheres.append(sphere)
 
-# Animate the ions and the fields
+
+
+# Animate the ions and the magnetic spheres
 start_frame = 1
 end_frame = 250
 peak_frame = 125
 sigma = 25
- 
+
 for frame in range(start_frame, end_frame + 1):
     spike_intensity = math.exp(-((frame - peak_frame)**2) / (2 * sigma**2))
 
@@ -83,13 +92,23 @@ for frame in range(start_frame, end_frame + 1):
             ion.location.z = -5
         ion.keyframe_insert(data_path="location", frame=frame)
 
-    # Update magnetic field arrows based on spike intensity
-    for arrow in magnetic_arrows:
-        arrow.scale.z = 10*spike_intensity 
-        arrow.keyframe_insert(data_path="scale", frame=frame)
+    # Rotate magnetic spheres around the z-axis
+    for sphere in magnetic_spheres:
+        x, y, z = sphere.location
+        radial_distance = math.sqrt(x**2 + y**2)
+        
+        # Set rotation speed based on spike_intensity and radial_distance
+        if radial_distance != 0:
+            angle = math.atan2(y, x)
+            rotation_speed = .1*spike_intensity / radial_distance
+            angle += rotation_speed  # anti-clockwise rotation
+            sphere.location.x = math.cos(angle) * radial_distance
+            sphere.location.y = math.sin(angle) * radial_distance
+            sphere.keyframe_insert(data_path="location", frame=frame)
 
     # Update electric field on the axon
     axon.scale.z = 1 + spike_intensity * 0.1  # Adjust scaling factor as needed
     axon.keyframe_insert(data_path="scale", frame=frame)
+
 
 bpy.context.scene.frame_end = end_frame
