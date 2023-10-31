@@ -27,3 +27,5 @@ This Blender script simulates the movement of ions (Sodium and Potassium) along 
 - Python
 
 For more detailed explanation, feel free to explore the source code. Enjoy visualizing the fascinating world of neurons!
+
+Note: Generated with the help of ChatGPT4.
