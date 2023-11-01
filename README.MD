@@ -13,7 +13,7 @@ This Blender script performs a simulated animation of Sodium and Potassium ions 
 - Materials are assigned to ions and magnetic spheres for better visualization.
 
 ![Simulation Example](EM.gif)
-
+[![Simulation Example](https://youtube.com/shorts/yE4pNULS68U)](https://youtube.com/shorts/yE4pNULS68U)
 ### How it Works
 
 1. **Environment Cleanup**: Deletes existing mesh objects in the scene.
